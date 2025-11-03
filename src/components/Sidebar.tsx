@@ -16,7 +16,7 @@ const mainItems: SidebarItem[] = [
 
 export default function Sidebar() {
   const [openMain, setOpenMain] = useState(false);
-  const [openExercises, setOpenExercises] = useState(false);
+ 
 
   const renderNavItem = ({ label, route, icon }: SidebarItem) => (
     <NavLink
