@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaHome, FaCalculator, FaLeaf, FaGlobeAmericas, FaCog} from "react-icons/fa";
+import {FaCalculator, FaLeaf, FaGlobeAmericas, FaCog} from "react-icons/fa";
 
 interface SidebarItem {
   label: string;
