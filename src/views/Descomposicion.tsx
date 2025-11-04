@@ -444,6 +444,28 @@ export default function Descomposicion() {
             Para {currentFigure.label}: {currentFigure.faces} - {currentFigure.edges} + {currentFigure.vertices} = {currentFigure.faces - currentFigure.edges + currentFigure.vertices}
           </p>
         </div>
+
+        {/* Footer */}
+        <footer className="mt-12 pt-8 border-t border-purple-200 dark:border-purple-800">
+          <div className="text-center">
+            <div className="flex justify-center items-center mb-4">
+              <svg
+                className="w-8 h-8 text-purple-600 dark:text-purple-400 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-xl font-bold text-purple-600 dark:text-purple-400">
+                ¡DIERY VALENCIA @2025!
+              </h3>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300 mb-4">
+              Has explorado la descomposición de figuras 3D y la fórmula de Euler.
+            </p>
+          </div>
+        </footer>
       </motion.div>
     </div>
   );

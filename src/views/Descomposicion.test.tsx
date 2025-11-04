@@ -45,3 +45,8 @@ test("calcula correctamente la fórmula de Euler para el cubo", () => {
   render(<Descomposicion />);
   expect(screen.getByText(/Para Cubo: 6 - 12 \+ 8 = 2/i)).toBeInTheDocument();
 });
+
+test("muestra el footer con botones de acción", () => {
+  render(<Descomposicion />);
+  expect(screen.getByText(/¡DIERY VALENCIA @2025!/i)).toBeInTheDocument();
+});
