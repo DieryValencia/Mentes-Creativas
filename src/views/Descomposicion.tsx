@@ -143,7 +143,7 @@ export default function Descomposicion() {
               <div 
                 className="absolute"
                 style={{ 
-                  transform: 'translateZ(42px) rotateX(-58deg)',
+                  transform: ' translateZ(42px) rotateX(-58deg)',
                   width: 0,
                   height: 0,
                   borderLeft: '85px solid transparent',
@@ -462,7 +462,7 @@ export default function Descomposicion() {
               </h3>
             </div>
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Has explorado la descomposición de figuras 3D y la fórmula de Euler.
+              Gracias por visitarnos hasta la procxima.
             </p>
           </div>
         </footer>
