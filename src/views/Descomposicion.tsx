@@ -131,7 +131,7 @@ export default function Descomposicion() {
                   height: 0,
                   borderLeft: '85px solid transparent',
                   borderRight: '85px solid transparent',
-                  borderBottom: '145px solid rgb(251, 146, 60)',
+                  borderBottom: '145px solid rgba(71, 49, 31, 1)',
                   transformOrigin: 'center bottom',
                   left: '50%',
                   marginLeft: '-85px',
