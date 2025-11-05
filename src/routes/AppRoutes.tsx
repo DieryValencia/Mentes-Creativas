@@ -7,6 +7,7 @@ import LayoutsView from "../views/LayoutsView";
 import Descomposicion from "../views/Descomposicion";
 import CienciasNaturales from "../views/CienciasNaturales";
 import CienciasSociales from "../views/CienciasSociales";
+import CicloDelAgua from "../views/CicloDelAgua";
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
         <Route path="layouts" element={<LayoutsView />} />
         <Route path="matematicas/descomposicion" element={<Descomposicion />} />
         <Route path="ciencias-naturales" element={<CienciasNaturales />} />
+        <Route path="ciclo-del-agua" element={<CicloDelAgua />} />
         <Route path="ciencias-sociales" element={<CienciasSociales />} />
       </Route>
     </Routes>
