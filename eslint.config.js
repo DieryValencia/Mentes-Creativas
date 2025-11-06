@@ -1,6 +1,7 @@
 // ESLint v9 flat config
 import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   // Ignorar directorios de build y dependencias
@@ -8,7 +9,7 @@ export default [
     ignores: ["dist/**", "node_modules/**", "coverage/**"],
   },
 
-  // Reglas base recomendadas de ESLint para JS/TS
+  // Configuración base recomendada para JS
   {
     ...js.configs.recommended,
     files: ["**/*.{js,cjs,mjs,ts,tsx}"],
@@ -18,7 +19,7 @@ export default [
     },
   },
 
-  // Soporte de parser para TypeScript y TSX (sin reglas específicas)
+  // Configuración para TypeScript y TSX
   {
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
@@ -29,29 +30,39 @@ export default [
         ecmaFeatures: { jsx: true },
         project: false,
       },
-      // Globals de entorno navegador/DOM para evitar falsos positivos de no-undef
       globals: {
+        // 🌐 Globals del entorno navegador / DOM
         window: "readonly",
         document: "readonly",
         localStorage: "readonly",
         console: "readonly",
         CustomEvent: "readonly",
         requestAnimationFrame: "readonly",
+        cancelAnimationFrame: "readonly",
         ResizeObserver: "readonly",
         HTMLInputElement: "readonly",
         HTMLDivElement: "readonly",
+        HTMLCanvasElement: "readonly",
+        CanvasRenderingContext2D: "readonly",
         SpeechSynthesisVoice: "readonly",
         SpeechSynthesisUtterance: "readonly",
         React: "readonly",
       },
     },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+    },
     rules: {
-      // En TS, delegar indefinidos al chequeo de tipos de TypeScript
+      // Desactiva reglas conflictivas
       "no-undef": "off",
+      "no-unused-vars": "off",
+
+      // Activa la versión TypeScript de la regla
+      "@typescript-eslint/no-unused-vars": ["warn"],
     },
   },
 
-  // Overrides para archivos de test y setup: habilitar globals de Jest
+  // Overrides para archivos de test y setup
   {
     files: ["**/*.test.ts", "**/*.test.tsx", "src/setupTests.ts"],
     languageOptions: {
@@ -73,7 +84,7 @@ export default [
     },
   },
 
-  // Overrides para archivos de configuración CommonJS específicos
+  // Overrides para CommonJS
   {
     files: ["postcss.config.cjs"],
     languageOptions: {
@@ -88,7 +99,7 @@ export default [
     },
   },
 
-  // Overrides para configs ESM
+  // Overrides para ESM
   {
     files: ["eslint.config.js", "jest.config.js"],
     languageOptions: {
@@ -96,5 +107,3 @@ export default [
     },
   },
 ];
-
-
