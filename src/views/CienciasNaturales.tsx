@@ -142,7 +142,7 @@ export default function CienciasNaturales() {
             transition={{ delay: 0.4 }}
             className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-lg hover:shadow-xl transition-all"
           >
-            <div className="text-5xl mb-4">🌧️</div>
+            <div className="text-5xl mb-4">🌧️🌧️</div>
             <h4 className="font-bold text-xl mb-3 text-slate-800 dark:text-white">Precipitación</h4>
             <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               Las gotas se hacen pesadas y caen como lluvia, nieve o granizo hacia la tierra

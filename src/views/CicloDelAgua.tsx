@@ -83,8 +83,8 @@ export default function CicloDelAgua() {
           y: Math.random() * 1 + 0.5,
           z: (Math.random() - 0.5) * 0.5
         },
-        opacity: Math.random() * 0.5 + 0.5,
-        size: Math.random() * 2 + 2,
+        opacity: Math.random() * 0.4 + 0.6,
+        size: Math.random() * 3 + 4,
         cycleCount: 0
       });
     }
@@ -112,7 +112,7 @@ export default function CicloDelAgua() {
                 newParticle.phase = 'condensation';
                 newParticle.velocity.y = (Math.random() - 0.5) * 0.3;
                 newParticle.velocity.x = (Math.random() - 0.5) * 0.5;
-                newParticle.size = Math.random() * 1.5 + 1;
+                newParticle.size = Math.random() * 2.5 + 3;
               }
               break;
 
@@ -124,7 +124,7 @@ export default function CicloDelAgua() {
               if (Math.random() < 0.008 * speed) {
                 newParticle.phase = 'precipitation';
                 newParticle.velocity.y = -(Math.random() * 2 + 2.5);
-                newParticle.size = Math.random() * 2 + 3;
+                newParticle.size = Math.random() * 3 + 5;
               }
               break;
 
@@ -137,7 +137,8 @@ export default function CicloDelAgua() {
                 newParticle.phase = 'collection';
                 newParticle.velocity.y = 0;
                 newParticle.velocity.x = 0;
-                newParticle.opacity = 0.7;
+                newParticle.opacity = 0.8;
+                newParticle.size = Math.random() * 2 + 4;
               }
               break;
 
@@ -150,8 +151,8 @@ export default function CicloDelAgua() {
                 newParticle.x = Math.random() * 400 - 200;
                 newParticle.velocity.y = Math.random() * 1 + 0.5;
                 newParticle.velocity.x = (Math.random() - 0.5) * 0.5;
-                newParticle.opacity = Math.random() * 0.5 + 0.5;
-                newParticle.size = Math.random() * 2 + 2;
+                newParticle.opacity = Math.random() * 0.4 + 0.6;
+                newParticle.size = Math.random() * 3 + 4;
                 newParticle.cycleCount += 1;
                 
                 if (newParticle.cycleCount > 0 && particle.phase === 'collection') {
@@ -180,7 +181,7 @@ export default function CicloDelAgua() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, speed]);
+  }, [isPlaying, speed, particles.length]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -213,7 +214,7 @@ export default function CicloDelAgua() {
       const screenX = centerX + x2 * scale;
       const screenY = centerY - y1 * scale;
       const depth = (z2 + 150) / 300;
-      const size = particle.size * (0.5 + depth * 0.5);
+      const size = particle.size * (0.7 + depth * 0.6) * 1.5;
 
       const phaseColors: Record<WaterPhase, string> = {
         evaporation: 'rgba(59, 130, 246, ',
@@ -224,7 +225,7 @@ export default function CicloDelAgua() {
 
       const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size);
       gradient.addColorStop(0, phaseColors[particle.phase] + particle.opacity + ')');
-      gradient.addColorStop(0.5, phaseColors[particle.phase] + (particle.opacity * 0.7) + ')');
+      gradient.addColorStop(0.4, phaseColors[particle.phase] + (particle.opacity * 0.8) + ')');
       gradient.addColorStop(1, phaseColors[particle.phase] + '0)');
 
       ctx.beginPath();
@@ -233,9 +234,13 @@ export default function CicloDelAgua() {
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(screenX - size * 0.3, screenY - size * 0.3, size * 0.4, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, ' + (particle.opacity * 0.6) + ')';
+      ctx.arc(screenX - size * 0.25, screenY - size * 0.25, size * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + (particle.opacity * 0.7) + ')';
       ctx.fill();
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, ' + (particle.opacity * 0.3) + ')';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
     });
 
     drawEnvironment(ctx, centerX, centerY);
@@ -312,11 +317,11 @@ export default function CicloDelAgua() {
             Simulación interactiva del ciclo hidrológico
           </p>
           
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            <span className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-semibold">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
+            <span className="px-5 py-3 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-base font-bold">
               🔄 {totalCycles} ciclos completados
             </span>
-            <span className="px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full text-sm font-semibold">
+            <span className="px-5 py-3 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full text-base font-bold">
               ⚡ {particles.length} partículas activas
             </span>
           </div>
@@ -336,10 +341,10 @@ export default function CicloDelAgua() {
               <div className="mt-4 space-y-3">
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
                       🔄 Rotación Horizontal
                     </label>
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-semibold">
+                    <span className="text-base text-blue-600 dark:text-blue-400 font-bold">
                       {rotationY}°
                     </span>
                   </div>
@@ -354,10 +359,10 @@ export default function CicloDelAgua() {
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
                       ↕️ Rotación Vertical
                     </label>
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-semibold">
+                    <span className="text-base text-blue-600 dark:text-blue-400 font-bold">
                       {rotationX}°
                     </span>
                   </div>
@@ -373,15 +378,18 @@ export default function CicloDelAgua() {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-4">
-              <h3 className="font-bold text-gray-800 dark:text-white mb-3">🎯 Filtrar por Fase</h3>
-              <div className="grid grid-cols-5 gap-2">
+            <div className="bg-gradient-to-br from-white to-cyan-50 dark:from-slate-800 dark:to-cyan-900/20 rounded-2xl shadow-xl p-6 border-2 border-cyan-100 dark:border-cyan-800">
+              <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-5 flex items-center gap-3">
+                <span className="text-3xl">🎯</span>
+                Filtrar por Fase
+              </h3>
+              <div className="grid grid-cols-5 gap-3">
                 <button
                   onClick={() => setSelectedPhase('all')}
-                  className={`py-2 px-3 rounded-lg font-semibold transition-all ${
+                  className={`py-4 px-4 rounded-xl font-bold text-base transition-all duration-300 shadow-md ${
                     selectedPhase === 'all'
-                      ? 'bg-blue-600 text-white scale-105'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white scale-110 shadow-lg'
+                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 hover:scale-105'
                   }`}
                 >
                   Todas
@@ -390,15 +398,16 @@ export default function CicloDelAgua() {
                   <button
                     key={phase}
                     onClick={() => setSelectedPhase(phase)}
-                    className={`py-2 px-3 rounded-lg font-semibold transition-all ${
+                    className={`py-4 px-4 rounded-xl font-bold text-2xl transition-all duration-300 shadow-md ${
                       selectedPhase === phase
-                        ? 'scale-105'
-                        : 'hover:scale-105'
+                        ? 'scale-110 shadow-xl'
+                        : 'hover:scale-110 bg-white dark:bg-gray-700'
                     }`}
                     style={{
                       backgroundColor: selectedPhase === phase ? phaseInfo[phase].color : undefined,
                       color: selectedPhase === phase ? 'white' : undefined
                     }}
+                    title={phaseInfo[phase].title}
                   >
                     {phaseInfo[phase].emoji}
                   </button>
@@ -421,72 +430,104 @@ export default function CicloDelAgua() {
               }}
             />
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                  📚 Información
+            <div className="bg-gradient-to-br from-white to-purple-50 dark:from-slate-800 dark:to-purple-900/20 rounded-2xl shadow-2xl p-8 border-2 border-purple-100 dark:border-purple-800">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
+                  <span className="text-4xl">📚</span>
+                  Información de las Fases
                 </h2>
                 <button
                   onClick={() => setShowInfo(!showInfo)}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                  className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-4xl font-bold transition-transform hover:scale-110"
                 >
                   {showInfo ? '➖' : '➕'}
                 </button>
               </div>
               
               {showInfo && (
-                <div className="space-y-3">
-                  {(Object.keys(phaseInfo) as WaterPhase[]).map((phase) => (
+                <div className="space-y-5">
+                  {(Object.keys(phaseInfo) as WaterPhase[]).map((phase, index) => (
                     <div
                       key={phase}
-                      className="p-4 rounded-xl border-2 transition-all hover:scale-102 cursor-pointer"
+                      className="p-6 rounded-2xl border-3 transition-all hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
                       style={{
+                        borderWidth: '3px',
                         borderColor: phaseInfo[phase].color,
-                        backgroundColor: `${phaseInfo[phase].color}10`
+                        backgroundColor: `${phaseInfo[phase].color}15`,
+                        animationDelay: `${index * 0.1}s`
                       }}
                       onClick={() => setSelectedPhase(phase)}
                     >
-                      <h3 className="font-bold text-gray-800 dark:text-white mb-1 flex items-center gap-2">
-                        <span className="text-2xl">{phaseInfo[phase].emoji}</span>
-                        {phaseInfo[phase].title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="text-5xl bg-white dark:bg-slate-700 p-3 rounded-xl shadow-md">
+                          {phaseInfo[phase].emoji}
+                        </div>
+                        <h3 className="font-bold text-2xl text-gray-800 dark:text-white">
+                          {phaseInfo[phase].title}
+                        </h3>
+                      </div>
+                      <p className="text-lg text-gray-700 dark:text-gray-200 mb-3 leading-relaxed font-medium">
                         {phaseInfo[phase].description}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                        {phaseInfo[phase].detailedInfo}
-                      </p>
+                      <div className="bg-white/60 dark:bg-slate-800/60 p-4 rounded-xl">
+                        <p className="text-base text-gray-600 dark:text-gray-300 italic leading-relaxed">
+                          ℹ️ {phaseInfo[phase].detailedInfo}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg p-6 text-white">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                📊 Estadísticas en Vivo
+            <div className="bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-700 rounded-2xl shadow-2xl p-8 text-white border-2 border-blue-400">
+              <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-4xl bg-white/20 p-2 rounded-xl">📊</span>
+                Estadísticas en Tiempo Real
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-6">
                 {(Object.keys(phaseInfo) as WaterPhase[]).map((phase) => {
                   const count = particles.filter(p => p.phase === phase).length;
                   const percentage = ((count / particles.length) * 100).toFixed(1);
                   return (
-                    <div key={phase}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="font-medium flex items-center gap-2">
-                          {phaseInfo[phase].emoji} {phaseInfo[phase].title}
+                    <div key={phase} className="bg-white/10 backdrop-blur-sm rounded-xl p-5 hover:bg-white/20 transition-all">
+                      <div className="flex justify-between items-center text-xl mb-4">
+                        <span className="font-bold flex items-center gap-3">
+                          <span className="text-4xl bg-white/20 p-2 rounded-lg">{phaseInfo[phase].emoji}</span>
+                          <span className="text-white drop-shadow-lg">{phaseInfo[phase].title}</span>
                         </span>
-                        <span className="font-bold">{count} ({percentage}%)</span>
+                        <span className="font-bold text-2xl bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                          {count} <span className="text-lg">({percentage}%)</span>
+                        </span>
                       </div>
-                      <div className="w-full bg-white/20 rounded-full h-2">
+                      <div className="relative w-full bg-white/20 rounded-full h-5 overflow-hidden shadow-inner">
                         <div
-                          className="bg-white rounded-full h-2 transition-all duration-300"
+                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-white to-blue-100 rounded-full transition-all duration-500 shadow-lg flex items-center justify-end pr-3"
                           style={{ width: `${percentage}%` }}
-                        />
+                        >
+                          {parseFloat(percentage) > 15 && (
+                            <span className="text-blue-700 font-bold text-sm">{percentage}%</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+              </div>
+              
+              <div className="mt-6 pt-6 border-t-2 border-white/30">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <div className="text-3xl mb-2">💧</div>
+                    <div className="text-2xl font-bold">{particles.length}</div>
+                    <div className="text-sm opacity-90">Total Partículas</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <div className="text-3xl mb-2">🔄</div>
+                    <div className="text-2xl font-bold">{totalCycles}</div>
+                    <div className="text-sm opacity-90">Ciclos Completos</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
