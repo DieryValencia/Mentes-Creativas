@@ -26,7 +26,6 @@ const CONTINENTES: Continente[] = [
   { id: "oceania", nombre: "Oceanía", lat: -25, lon: 140, color: "#a78bfa", curiosidades: ["En Australia viven canguros y koalas.", "La Gran Barrera de Coral es el mayor arrecife del mundo.", "Nueva Zelanda fue pionera en el voto femenino (1893)."] },
 ];
 
-
 /* -------------------- Utilidades 3D -------------------- */
 function latLonToVec3(radius: number, lat: number, lon: number) {
   const phi = (90 - lat) * (Math.PI / 180);
@@ -38,6 +37,8 @@ function latLonToVec3(radius: number, lat: number, lon: number) {
 }
 
 /* -------------------- Subcomponentes 3D -------------------- */
+
+// Nubes semitransparentes
 function Nubes({ radius = 1.018 }: { radius?: number }) {
   const ref = useRef<THREE.Mesh>(null!);
   useFrame((_, delta) => {
@@ -51,31 +52,59 @@ function Nubes({ radius = 1.018 }: { radius?: number }) {
   );
 }
 
+// Atmósfera azul realista
+function Atmosfera({ radius = 1.05 }: { radius?: number }) {
+  return (
+    <mesh>
+      <sphereGeometry args={[radius, 64, 64]} />
+      <meshBasicMaterial color="#3b82f6" transparent opacity={0.15} side={THREE.BackSide} />
+    </mesh>
+  );
+}
+
+// Marcadores interactivos
 function Markers({ onSelect, nightMode }: { onSelect: (c: Continente) => void; nightMode: boolean }) {
   const markers = useMemo(
     () => CONTINENTES.map((c) => ({ c, pos: latLonToVec3(1.012, c.lat, c.lon) })),
     []
   );
+  const groupRef = useRef<THREE.Group>(null!);
+
+  useFrame((state) => {
+    groupRef.current?.children.forEach((m: any) => {
+      if (m.userData.active) {
+        const scale = 1 + Math.sin(state.clock.elapsedTime * 6) * 0.2;
+        m.scale.setScalar(scale);
+      }
+    });
+  });
 
   return (
-    <>
+    <group ref={groupRef}>
       {markers.map(({ c, pos }) => (
         <mesh
           key={c.id}
           position={pos}
           onClick={(e) => {
             e.stopPropagation();
+            groupRef.current?.children.forEach((m: any) => (m.userData.active = false));
+            (e.object as any).userData.active = true;
             onSelect(c);
           }}
         >
           <sphereGeometry args={[0.032, 16, 16]} />
-          <meshStandardMaterial color={c.color} emissive={c.color} emissiveIntensity={nightMode ? 1.0 : 0.6} />
+          <meshStandardMaterial
+            color={c.color}
+            emissive={c.color}
+            emissiveIntensity={nightMode ? 1.0 : 0.6}
+          />
         </mesh>
       ))}
-    </>
+    </group>
   );
 }
 
+// Globo principal con texturas y luces dinámicas
 function Globo3D({
   nightMode,
   onSelect,
@@ -85,8 +114,13 @@ function Globo3D({
   onSelect: (c: Continente) => void;
   onRegisterCameraSetter?: (fn: (lat: number, lon: number) => void) => void;
 }) {
-  const earthMap = useTexture("/textures/earthmap.jpg");
+  const [earthMap, normalMap, bumpMap] = useTexture([
+    "/textures/earthmap.jpg",
+    "/textures/earth_normal.jpg",
+    "/textures/earth_bump.jpg",
+  ]);
   const { camera } = useThree();
+  const lightRef = useRef<THREE.DirectionalLight>(null!);
 
   useEffect(() => {
     if (!onRegisterCameraSetter) return;
@@ -98,15 +132,36 @@ function Globo3D({
     onRegisterCameraSetter(updateCamera);
   }, [camera, onRegisterCameraSetter]);
 
+  // Luz solar rotatoria
+  useFrame((state) => {
+    if (lightRef.current) {
+      lightRef.current.position.x = Math.sin(state.clock.elapsedTime / 5) * 5;
+      lightRef.current.position.z = Math.cos(state.clock.elapsedTime / 5) * 5;
+    }
+  });
+
   return (
     <>
       <ambientLight intensity={nightMode ? 0.25 : 0.8} />
-      <directionalLight position={[5, 2, 5]} intensity={nightMode ? 0.5 : 1} color={nightMode ? "#9cc2ff" : "#ffffff"} />
-      <Stars radius={60} depth={30} count={2000} factor={2} fade />
+      <directionalLight
+        ref={lightRef}
+        position={[5, 2, 5]}
+        intensity={nightMode ? 0.5 : 1.1}
+        color={nightMode ? "#9cc2ff" : "#fff6e5"}
+      />
+      <Stars radius={80} depth={50} count={4000} factor={4} fade />
       <mesh>
         <sphereGeometry args={[1, 128, 128]} />
-        <meshStandardMaterial map={earthMap} roughness={0.85} metalness={0.1} />
+        <meshStandardMaterial
+          map={earthMap}
+          normalMap={normalMap}
+          bumpMap={bumpMap}
+          bumpScale={0.03}
+          roughness={0.7}
+          metalness={0.1}
+        />
       </mesh>
+      <Atmosfera />
       <Nubes />
       <Markers onSelect={onSelect} nightMode={nightMode} />
       <OrbitControls enablePan={false} autoRotate={false} rotateSpeed={0.9} zoomSpeed={0.7} minDistance={1.8} maxDistance={3.8} />
@@ -147,12 +202,8 @@ export default function GloboInteractivo() {
   };
 
   const camSetterRef = useRef<((lat: number, lon: number) => void) | null>(null);
-  const registerCameraSetter = (fn: (lat: number, lon: number) => void) => {
-    camSetterRef.current = fn;
-  };
-  const centerOn = (c: Continente) => {
-    camSetterRef.current?.(c.lat, c.lon);
-  };
+  const registerCameraSetter = (fn: (lat: number, lon: number) => void) => (camSetterRef.current = fn);
+  const centerOn = (c: Continente) => camSetterRef.current?.(c.lat, c.lon);
 
   const progress = Math.round((discovered.length / CONTINENTES.length) * 100);
 
@@ -188,9 +239,20 @@ export default function GloboInteractivo() {
           {/* Chips */}
           <div className="absolute right-3 top-3 flex gap-2">
             {CONTINENTES.map((c) => (
-              <span key={c.id} className={`text-[11px] px-2 py-0.5 rounded-full border ${discovered.includes(c.id) ? "bg-green-600/90 border-green-300" : "bg-slate-700/70 border-slate-400"}`} title={c.nombre}>
+              <motion.span
+                key={c.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className={`text-[11px] px-2 py-0.5 rounded-full border ${
+                  discovered.includes(c.id)
+                    ? "bg-green-600/90 border-green-300"
+                    : "bg-slate-700/70 border-slate-400"
+                }`}
+                title={c.nombre}
+              >
                 {c.nombre}
-              </span>
+              </motion.span>
             ))}
           </div>
         </div>
@@ -214,6 +276,7 @@ export default function GloboInteractivo() {
     </div>
   );
 }
+
 
 
 
