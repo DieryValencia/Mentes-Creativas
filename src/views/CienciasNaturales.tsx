@@ -116,7 +116,7 @@ export default function CienciasNaturales() {
             transition={{ delay: 0.2 }}
             className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-lg hover:shadow-xl transition-all"
           >
-            <div className="text-5xl mb-4">☀️</div>
+            <div className="text-5xl mb-4">☀️☀️</div>
             <h4 className="font-bold text-xl mb-3 text-slate-800 dark:text-white">Evaporación</h4>
             <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               El sol calienta el agua de océanos y ríos, transformándola en vapor que asciende a la atmósfera
@@ -129,7 +129,7 @@ export default function CienciasNaturales() {
             transition={{ delay: 0.3 }}
             className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-lg hover:shadow-xl transition-all"
           >
-            <div className="text-5xl mb-4">☁️</div>
+            <div className="text-5xl mb-4">☁️☁️</div>
             <h4 className="font-bold text-xl mb-3 text-slate-800 dark:text-white">Condensación</h4>
             <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               El vapor se enfría en la atmósfera y forma pequeñas gotas que crean las nubes
