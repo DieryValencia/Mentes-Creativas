@@ -462,7 +462,7 @@ export default function Descomposicion() {
               </h3>
             </div>
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Gracias por visitarnos hasta la procxima.
+              Gracias por visitarnos hasta la proxima.
             </p>
           </div>
         </footer>
