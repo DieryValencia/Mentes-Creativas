@@ -311,7 +311,7 @@ export default function CicloDelAgua() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-blue-900 dark:text-blue-100 mb-3 flex items-center justify-center gap-3">
-            💧 Ciclo del Agua en 3D
+            💧 Ciclo del Agua en 3D.
           </h1>
           <p className="text-xl md:text-2xl text-blue-700 dark:text-blue-300">
             Simulación interactiva del ciclo hidrológico
@@ -342,7 +342,7 @@ export default function CicloDelAgua() {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
-                      🔄 Rotación Horizontal
+                      🔄 Rotación Horizontal.
                     </label>
                     <span className="text-base text-blue-600 dark:text-blue-400 font-bold">
                       {rotationY}°
@@ -360,7 +360,7 @@ export default function CicloDelAgua() {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
-                      ↕️ Rotación Vertical
+                      ↕️ Rotación Vertical.
                     </label>
                     <span className="text-base text-blue-600 dark:text-blue-400 font-bold">
                       {rotationX}°
