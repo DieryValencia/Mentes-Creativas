@@ -9,4 +9,5 @@ export default {
     "^.+\\.(ts|tsx)$": ["ts-jest", { useESM: true }],
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"],
+  testPathIgnorePatterns: ["<rootDir>/e2e/"],
 };
