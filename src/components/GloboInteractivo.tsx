@@ -93,7 +93,7 @@ function Globo3D({
     const updateCamera = (lat: number, lon: number) => {
       const p = latLonToVec3(2.4, lat, lon);
       camera.position.lerp(p, 0.6);
-      (camera as any).lookAt(0, 0, 0);
+      camera.lookAt(0, 0, 0);
     };
     onRegisterCameraSetter(updateCamera);
   }, [camera, onRegisterCameraSetter]);
@@ -106,8 +106,8 @@ function Globo3D({
       <mesh>
         <sphereGeometry args={[1, 128, 128]} />
         <meshStandardMaterial map={earthMap} roughness={0.85} metalness={0.1} />
-        <Nubes />
       </mesh>
+      <Nubes />
       <Markers onSelect={onSelect} nightMode={nightMode} />
       <OrbitControls enablePan={false} autoRotate={false} rotateSpeed={0.9} zoomSpeed={0.7} minDistance={1.8} maxDistance={3.8} />
     </>
@@ -123,8 +123,8 @@ export default function GloboInteractivo() {
   const [discovered, setDiscovered] = useState<string[]>(JSON.parse(localStorage.getItem("discovered") || "[]"));
 
   const [playClick] = useSound("/sounds/click.mp3", { volume: 0.5 });
-  const [playAmbient, { stop: stopAmbient }] = useSound("/sounds/ambient.mp3", { volume: 0.2, loop: true });
-  const [playNature, { stop: stopNature }] = useSound("/sounds/nature.mp3", { volume: 0.25, loop: true });
+  const [playAmbient, { stop: stopAmbient }] = useSound("/sounds/europa.mp3", { volume: 0.2, loop: true });
+  const [playNature, { stop: stopNature }] = useSound("/sounds/asia.mp3", { volume: 0.25, loop: true });
 
   useEffect(() => (musicOn ? playAmbient() : stopAmbient()), [musicOn]);
   useEffect(() => (natureOn ? playNature() : stopNature()), [natureOn]);

@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "test:integration": "jest --config jest.integration.config.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",
