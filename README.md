@@ -134,9 +134,3 @@ npm test
 
 ---
 
-## Autor
-
-**Gustavo Sánchez Rodríguez**
-Asignatura: Ingeniería Web
-Clase UCC
-
